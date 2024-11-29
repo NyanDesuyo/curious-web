@@ -56,15 +56,15 @@ export function GetRandomFact() {
             <tr>
               <th className="bg-[#A6AEBF] p-2">Question</th>
               <th className="bg-[#A6AEBF] p-2">Answer</th>
-              <th className="bg-[#A6AEBF] p-2">Reference</th>
+              <th className="bg-[#A6AEBF] p-2 text-xs">Reference</th>
             </tr>
           </thead>
           <tbody>
             {data?.map((item) => (
               <tr key={item.ID} className="odd:bg-slate-100">
                 <td className="bg-[#C6E7FF] p-2">{item.Question}</td>
-                <td className="bg-white p-2">{item.Answer}</td>
-                <td className="bg-white p-2">{item.Reference}</td>
+                <td className="bg-white p-4">{item.Answer}</td>
+                <td className="bg-white p-1 text-xs">{item.Reference}</td>
               </tr>
             ))}
           </tbody>
