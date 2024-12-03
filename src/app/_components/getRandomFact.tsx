@@ -16,15 +16,15 @@ export function GetRandomFact() {
   const data = getRandomFactData.data?.data;
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      <div className="flex flex-col gap-4 text-black">
+    <div className="flex flex-col items-center justify-center bg-[#898AA6] p-4 md:p-8 rounded-xl">
+      <div className="flex w-full flex-col gap-4 rounded-full p-4 md:p-8">
         <div className="flex items-center justify-between">
-          <div className="flex items-center justify-center p-2">
-            <span className="text-base font-semibold text-white">Limit:</span>
+          <div className="flex items-center justify-center">
+            <span className="font-semibold text-black">Limit:</span>
             <select
               value={limit}
               onChange={(e) => setLimit(parseInt(e.target.value, 10))}
-              className="mx-2 rounded-full bg-white/20 px-4 py-2 text-base font-semibold text-white transition hover:bg-white/30"
+              className="mx-2 rounded-full bg-white/20 px-4 py-2 text-base font-semibold text-black transition hover:bg-white/30"
             >
               {[5, 10, 20, 50].map((value) => (
                 <option key={value} value={value}>
@@ -36,22 +36,22 @@ export function GetRandomFact() {
           <div className="flex items-center justify-center gap-2 rounded-full bg-white/20 p-2">
             <button
               onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-              className="rounded-full bg-white/20 px-2 py-1 text-xs font-semibold text-white transition hover:bg-white/30"
+              className="rounded-full bg-white/20 px-2 py-1 text-xs font-semibold text-black transition hover:bg-white/30"
             >
               Previous
             </button>
-            <span className="text-base font-semibold text-white">
+            <span className="text-base font-semibold text-black">
               Page {page}
             </span>
             <button
               onClick={() => setPage((prev) => prev + 1)}
-              className="rounded-full bg-white/20 px-2 py-1 text-xs font-semibold text-white transition hover:bg-white/30"
+              className="rounded-full bg-white/20 px-2 py-1 text-xs font-semibold text-black transition hover:bg-white/30"
             >
               Next
             </button>
           </div>
         </div>
-        <table className="table-auto">
+        <table className="w-full table-auto bg-[#C9BBCF]">
           <thead>
             <tr>
               <th className="bg-[#A6AEBF] p-2">Question</th>
@@ -62,9 +62,11 @@ export function GetRandomFact() {
           <tbody>
             {data?.map((item) => (
               <tr key={item.ID} className="odd:bg-slate-100">
-                <td className="bg-[#C6E7FF] p-2">{item.Question}</td>
-                <td className="bg-white p-4">{item.Answer}</td>
-                <td className="bg-white p-1 text-xs">{item.Reference}</td>
+                <td className="bg-white p-2 text-black">{item.Question}</td>
+                <td className="bg-white p-4 text-black">{item.Answer}</td>
+                <td className="bg-white p-1 text-xs text-black">
+                  {item.Reference}
+                </td>
               </tr>
             ))}
           </tbody>
