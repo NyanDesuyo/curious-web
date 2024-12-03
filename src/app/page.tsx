@@ -1,4 +1,5 @@
 import { CreateRandomFact } from "~/app/_components/postRandomfact";
+import { CustomLink } from "~/app/_components/link";
 
 export default async function Home() {
   return (
@@ -8,6 +9,9 @@ export default async function Home() {
           Random Fact
         </h1>
         <CreateRandomFact />
+        <CustomLink href="/list">
+          <a className="text-2xl font-semibold text-white">List</a>
+        </CustomLink>
       </div>
     </main>
   );
