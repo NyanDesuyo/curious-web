@@ -16,7 +16,7 @@ export function GetRandomFact() {
   const data = getRandomFactData.data?.data;
 
   return (
-    <div className="flex flex-col items-center justify-center bg-[#898AA6] p-4 md:p-8 rounded-xl">
+    <div className="flex flex-col items-center justify-center rounded-xl bg-[#898AA6] p-4 md:p-8">
       <div className="flex w-full flex-col gap-4 rounded-full p-4 md:p-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-center">
@@ -65,7 +65,14 @@ export function GetRandomFact() {
                 <td className="bg-white p-2 text-black">{item.Question}</td>
                 <td className="bg-white p-4 text-black">{item.Answer}</td>
                 <td className="bg-white p-1 text-xs text-black">
-                  {item.Reference}
+                  <a
+                    href={item.Reference}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline"
+                  >
+                    {item.Reference}
+                  </a>
                 </td>
               </tr>
             ))}
