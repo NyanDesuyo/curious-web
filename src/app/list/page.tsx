@@ -13,8 +13,8 @@ export default function ListPage() {
           <GetRandomFact />
         </div>
         <div className="flex items-center justify-center">
-          <CustomLink href="/">
-            <a className="text-2xl font-semibold text-white">Home</a>
+          <CustomLink href="/" className="text-2xl font-semibold text-white">
+            Home
           </CustomLink>
         </div>
       </div>

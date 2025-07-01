@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { env } from "../../../env.js";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
@@ -12,13 +13,12 @@ export interface randomFactInterface {
 }
 
 export interface randomFactData {
-  ID: number;
-  CreatedAt: string;
-  UpdatedAt: string;
-  DeletedAt: string;
-  Question: string;
-  Answer: string;
-  Reference: string;
+  id: number;
+  question: string;
+  answer: string;
+  reference: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export const randomFactRouter = createTRPCRouter({
@@ -31,13 +31,20 @@ export const randomFactRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       const data = await fetch(
-        `http://192.168.1.101:8080/random-fact/?page=${input.page}&limit=${input.limit}`,
+        `${env.SERVER_URL}/random-fact/?page=${input.page}&limit=${input.limit}`,
       );
       const randomFact: randomFactInterface =
         (await data.json()) as randomFactInterface;
 
       return randomFact;
     }),
+
+  getRandom: publicProcedure.query(async () => {
+    const response = await fetch(`${env.SERVER_URL}/random-fact/random`);
+    const result = (await response.json()) as { data: randomFactData };
+
+    return result.data;
+  }),
 
   create: publicProcedure
     .input(
@@ -48,7 +55,7 @@ export const randomFactRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input }) => {
-      const data = await fetch("http://192.168.1.101:8080/random-fact/", {
+      const data = await fetch(`${env.SERVER_URL}/random-fact/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

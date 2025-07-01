@@ -12,7 +12,7 @@ export const CustomLink: React.FC<LinkProps> = ({
   className,
 }) => {
   return (
-    <Link legacyBehavior href={href} className={className}>
+    <Link href={href} className={className}>
       {children}
     </Link>
   );

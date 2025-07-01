@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { api } from "~/trpc/react";
 
 export function GetRandomFact() {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(10);
 
   const getRandomFactData = api.randomFact.getAll.useQuery({
     page,
@@ -15,69 +16,90 @@ export function GetRandomFact() {
 
   const data = getRandomFactData.data?.data;
 
+  if (getRandomFactData.isLoading) {
+    return (
+      <div className="flex justify-center py-8">
+        <div className="text-gray-500">Loading facts...</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center rounded-xl bg-[#898AA6] p-4 md:p-8">
-      <div className="flex w-full flex-col gap-4 rounded-full p-4 md:p-8">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center justify-center">
-            <span className="font-semibold text-black">Limit:</span>
-            <select
-              value={limit}
-              onChange={(e) => setLimit(parseInt(e.target.value, 10))}
-              className="mx-2 rounded-full bg-white/20 px-4 py-2 text-base font-semibold text-black transition hover:bg-white/30"
-            >
-              {[5, 10, 20, 50].map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="flex items-center justify-center gap-2 rounded-full bg-white/20 p-2">
-            <button
-              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-              className="rounded-full bg-white/20 px-2 py-1 text-xs font-semibold text-black transition hover:bg-white/30"
-            >
-              Previous
-            </button>
-            <span className="text-base font-semibold text-black">
-              Page {page}
-            </span>
-            <button
-              onClick={() => setPage((prev) => prev + 1)}
-              className="rounded-full bg-white/20 px-2 py-1 text-xs font-semibold text-black transition hover:bg-white/30"
-            >
-              Next
-            </button>
-          </div>
-        </div>
-        <table className="w-full table-auto bg-[#C9BBCF]">
-          <thead>
-            <tr>
-              <th className="bg-[#A6AEBF] p-2">Question</th>
-              <th className="bg-[#A6AEBF] p-2">Answer</th>
-              <th className="bg-[#A6AEBF] p-2 text-xs">Reference</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data?.map((item) => (
-              <tr key={item.ID} className="odd:bg-slate-100">
-                <td className="bg-white p-2 text-black">{item.Question}</td>
-                <td className="bg-white p-4 text-black">{item.Answer}</td>
-                <td className="bg-white p-1 text-xs text-black">
-                  <a
-                    href={item.Reference}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 underline"
-                  >
-                    {item.Reference}
-                  </a>
-                </td>
-              </tr>
+    <div className="space-y-6">
+      {/* Controls */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-600">Show:</span>
+          <select
+            value={limit}
+            onChange={(e) => setLimit(parseInt(e.target.value, 10))}
+            className="rounded-md border border-gray-300 px-3 py-1 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          >
+            {[5, 10, 20, 50].map((value) => (
+              <option key={value} value={value}>
+                {value}
+              </option>
             ))}
-          </tbody>
-        </table>
+          </select>
+          <span className="text-sm text-gray-600">per page</span>
+        </div>
+        
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            disabled={page === 1}
+            className="flex items-center gap-1 rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-600 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Previous
+          </button>
+          <span className="text-sm text-gray-600">Page {page}</span>
+          <button
+            onClick={() => setPage((prev) => prev + 1)}
+            disabled={!data || data.length < limit}
+            className="flex items-center gap-1 rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-600 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Next
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Facts List */}
+      <div className="space-y-4">
+        {data?.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            No facts found.
+          </div>
+        ) : (
+          data?.map((item, index) => (
+            <div
+              key={item.id || index}
+              className="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors"
+            >
+              <div className="space-y-2">
+                <div>
+                  <h3 className="font-medium text-gray-900">Q: {item.question}</h3>
+                </div>
+                <div>
+                  <p className="text-gray-700">A: {item.answer}</p>
+                </div>
+                {item.reference && (
+                  <div>
+                    <a
+                      href={item.reference}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-blue-600 hover:text-blue-800 underline"
+                    >
+                      Source
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
